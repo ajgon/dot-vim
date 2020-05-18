@@ -1,3 +1,4 @@
 localhistory
 bundle
 sessions
+autoload/plug.vim.old
