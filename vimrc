@@ -311,6 +311,7 @@ set laststatus=2
 set t_Co=256
 " Show line numbers
 set number
+set relativenumber
 " Syntax highlighting
 syntax on
 " Tab width
