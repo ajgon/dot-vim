@@ -9,15 +9,12 @@ call plug#begin('~/.config/vim/bundle')
 Plug 'embear/vim-localvimrc'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-"Plug 'Shougo/unite.vim'
 Plug 'Shougo/denite.nvim'
-"Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeTabsToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'jiangmiao/auto-pairs'
 Plug 'editorconfig/editorconfig-vim'
-"Plug 'Shougo/neocomplete.vim'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-dispatch'
@@ -26,13 +23,13 @@ Plug 'tpope/vim-surround'
 Plug 'cespare/vim-sbd'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'ajgon/vim-historic'
-"Plug 'ervandew/supertab'
 Plug 'sjl/gundo.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'SirVer/ultisnips'
-"Plug 'Valloric/YouCompleteMe'
 Plug 'craigemery/vim-autotag'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install()  }  }
+Plug 'junegunn/fzf.vim'
 
 " Terraform
 Plug 'hashivim/vim-terraform', { 'for': ['tf', 'terraform'] }
@@ -54,7 +51,6 @@ Plug 'tpope/vim-rvm'
 " Rust
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 
-"Plug 'terryma/vim-multiple-cursors'
 Plug 'janko-m/vim-test'
 if executable('make') || executable('gmake')
   Plug 'Shougo/vimproc.vim', { 'do': 'make' }
@@ -128,35 +124,9 @@ autocmd VimEnter * Obsession `~/.config/vim/vim-session-path.sh`
 " EditorConfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-" Denite Fuzzy find files
-call denite#custom#option('default', {
-    \ 'prompt': '❯'
-    \ })
-
-call denite#custom#var('file_rec', 'command',
-    \ ['rg', '--files', '--glob', '!.git'])
-call denite#custom#var('grep', 'command', ['rg'])
-call denite#custom#var('grep', 'default_opts',
-    \ ['--hidden', '--vimgrep', '--no-heading', '-S'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
-    \'noremap')
-call denite#custom#map('normal', '<Esc>', '<NOP>',
-    \'noremap')
-call denite#custom#map('normal', 'o', '<denite:do_action:default>',
-    \'noremap')
-call denite#custom#map('insert', '<C-v>', '<denite:do_action:vsplit>',
-    \'noremap')
-call denite#custom#map('normal', '<C-v>', '<denite:do_action:vsplit>',
-    \'noremap')
-call denite#custom#map('normal', 'dw', '<denite:delete_word_after_caret>',
-    \'noremap')
-
-"nnoremap <Leader>p :<C-u>Denite file_rec<CR>
-nnoremap <silent> <Leader>p <C-W>l:Denite file_rec<cr>
+" FZF
+nnoremap <silent> <Leader>p :Files<CR>
+nnoremap <silent> <Leader>P :Ag<CR>
 
 " Unite Fuzzy find files
 "nnoremap <silent> <Leader>p <C-W>l:Unite -auto-resize file_rec/async<cr>
@@ -453,3 +423,12 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 let g:coc_config_home = '$XDG_CONFIG_HOME/vim/coc'
 let g:coc_data_home = '$XDG_CONFIG_HOME/vim/coc'
 let g:coc_global_extensions = 'coc-solargraph'
+
+" Templates
+let g:pathToTemplates='$XDG_CONFIG_HOME/vim/templates'
+function! InsertTemplateSink(file)
+  execute ':.-1read '.g:pathToTemplates.'/'.split(a:file, ':')[0]
+endfunction
+
+command! InsertTemplate call fzf#vim#grep('ag --nogroup --column --no-color .+', 0, { 'dir': g:pathToTemplates, 'sink': function('InsertTemplateSink') })
+nnoremap <silent> <Leader>m :InsertTemplate<CR>
