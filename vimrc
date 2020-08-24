@@ -30,6 +30,7 @@ Plug 'craigemery/vim-autotag'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install()  }  }
 Plug 'junegunn/fzf.vim'
+Plug 'morhetz/gruvbox'
 
 " Terraform
 Plug 'hashivim/vim-terraform', { 'for': ['tf', 'terraform'] }
@@ -283,7 +284,12 @@ if exists('+termguicolors')
   set termguicolors
 endif
 " Color theme
-colorscheme Tomorrow-Night-Eighties
+if has("macunix")
+  colorscheme Tomorrow-Night-Eighties
+else
+  autocmd vimenter * colorscheme gruvbox
+  set background=dark
+endif
 " Show line numbers
 set number
 set relativenumber
@@ -423,6 +429,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 let g:coc_config_home = '$XDG_CONFIG_HOME/vim/coc'
 let g:coc_data_home = '$XDG_CONFIG_HOME/vim/coc'
 let g:coc_global_extensions = 'coc-solargraph'
+let g:coc_disable_startup_warning = 1
 
 " Templates
 let g:pathToTemplates='$XDG_CONFIG_HOME/vim/templates'
