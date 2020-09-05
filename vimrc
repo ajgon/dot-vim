@@ -239,9 +239,9 @@ nmap <silent> <Leader>T :A<CR>
 " --------------------------
 " Keybindings
 " --------------------------
-nnoremap <Leader><Right>    <C-W>l:bnext<CR>
+nnoremap <Leader>l    <C-W>l:bnext<CR>
 "inoremap <C-C><Right>     <Esc>:bnext<CR>
-nnoremap <Leader><Left>     <C-W>l:bprevious<CR>
+nnoremap <Leader>h     <C-W>l:bprevious<CR>
 "inoremap <C-C><Left>     <Esc>:bprevious<CR>
 "nnoremap <C-c><C-s>     :w<CR>
 "inoremap <C-c><C-s>     <Esc>:w<CR>
@@ -277,18 +277,19 @@ set encoding=utf-8
 set fileencoding=utf-8
 " Display statusbar
 set laststatus=2
+" Color theme
+if has("macunix")
+  colorscheme Tomorrow-Night-Eighties
+else
+  set background=dark
+  colorscheme gruvbox
+  "autocmd vimenter * colorscheme gruvbox
+endif
 " Enable true color
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
-endif
-" Color theme
-if has("macunix")
-  colorscheme Tomorrow-Night-Eighties
-else
-  autocmd vimenter * colorscheme gruvbox
-  set background=dark
 endif
 " Show line numbers
 set number
